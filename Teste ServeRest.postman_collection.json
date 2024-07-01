@@ -158,10 +158,74 @@
 			]
 		},
 		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const resposta = pm.response.json",
+									"pm.globals.set(\"token\", resposta.authorization);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"viggiano@qa.com.br\",\n  \"password\": \"teste\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Usuários",
 			"item": [
 				{
 					"name": "Editar usuário - 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Registro alterado com sucesso\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -191,6 +255,24 @@
 				},
 				{
 					"name": "Editar usuário - Email já cadastrado- 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Este email já está sendo usado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -220,12 +302,30 @@
 				},
 				{
 					"name": "Editar usuário - Cadastro realizado- 201",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de sucesso\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Cadastro realizado com sucesso\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"Lucas \",\n  \"email\": \"lucas_teste@qa.com.br\",\n  \"password\": \"teste\",\n  \"administrador\": \"false\"\n}",
+							"raw": "{\n  \"nome\": \"Lucas \",\n  \"email\": \"lucas_testeee@qa.com.br\",\n  \"password\": \"teste\",\n  \"administrador\": \"false\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -254,6 +354,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Validar se todos os campos foram preenchidos\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"   pm.expect(responseData).to.include.all.keys('nome', 'email', 'password', 'administrador');",
+									"});",
+									"",
+									"pm.test(\"Validar se o status retorna 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de sucesso\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Cadastro realizado com sucesso\");",
+									"});",
 									""
 								],
 								"type": "text/javascript",
@@ -266,7 +379,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n{\n  \"nome\": \"Lucas Editávelll\",\n  \"email\": \"lucas.editavell@qa.com.br\",\n  \"password\": \"teste\",\n  \"administrador\": \"true\"\n}",
+							"raw": "\n{\n  \"nome\": \"Lucas Editávellll\",\n  \"email\": \"lucas.editavelll@qa.com.br\",\n  \"password\": \"teste\",\n  \"administrador\": \"true\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -294,10 +407,29 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Validar se todos os campos foram preenchidos\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"   pm.expect(responseData).to.include.all.keys('nome', 'email', 'password', 'administrador');",
+									"});",
+									"",
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Este email já está sendo usado\");",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -334,7 +466,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"nome não pode ficar em branco\");",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -374,7 +512,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"nome não pode ficar em email não pode ficar em branco\");",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -414,7 +558,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"password não pode ficar em branco\");",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -454,7 +604,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"administrador deve ser 'true' ou 'false'\");",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -494,6 +650,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
 									""
 								],
 								"type": "text/javascript",
@@ -529,6 +688,24 @@
 				},
 				{
 					"name": "Deletar usuário - Nenhum registro excluído - 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include.(\"Nenhum registro excluído\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -549,6 +726,24 @@
 				},
 				{
 					"name": "Deletar usuário - Usuário com carrinho - 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include.(\"Não é permitido excluir usuário com carrinho cadastrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -569,6 +764,24 @@
 				},
 				{
 					"name": "Deletar usuário - Excluído com sucesso - 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de sucesso\", function () {",
+									"pm.expect(pm.response.text()).to.include.(\"Registro excluído com sucesso\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -653,6 +866,24 @@
 				},
 				{
 					"name": "Buscar usuário por ID - Não encontrado - 400",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validar mensagem de erro\", function () {",
+									"pm.expect(pm.response.text()).to.include(\"Usuário não encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -673,6 +904,22 @@
 				},
 				{
 					"name": "Listar usuários cadastrados - 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Validar se o status retorna 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -685,52 +932,6 @@
 							"port": "3000",
 							"path": [
 								"usuarios"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Login",
-			"item": [
-				{
-					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const resposta = pm.response.json",
-									"pm.globals.set(\"token\", resposta.authorization);"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"email\": \"viggiano@qa.com.br\",\n  \"password\": \"teste\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"login"
 							]
 						}
 					},
